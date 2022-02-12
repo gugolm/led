@@ -68,9 +68,12 @@ disconnectButton.addEventListener('click', () => {
   deviceNameLabel.textContent = defaultDeviceName;
 });
 
-ledonButton.addEventListener('click', () => {
-  send('AT+PIO21');
-});
+ledonButton.addEventListener(
+  'click', () => {
+    send('AT+BEFC200');
+    send('AT+RESET');
+  }
+);
 
 ledoffButton.addEventListener('click', () => {
   send('AT+PIO20');
