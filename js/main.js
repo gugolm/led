@@ -70,13 +70,13 @@ disconnectButton.addEventListener('click', () => {
 
 ledonButton.addEventListener(
   'click', () => {
-    send('AT+BEFC200AT+RESET');
+    send('AT+BEFC200');
     // send('AT+RESET');
   }
 );
 
 ledoffButton.addEventListener('click', () => {
-  send('AT+PIO20');
+  send('AT+BEFC000');
 });
 
 
