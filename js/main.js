@@ -70,8 +70,8 @@ disconnectButton.addEventListener('click', () => {
 
 ledonButton.addEventListener(
   'click', () => {
-    send('AT+BEFC200');
-    send('AT+RESET');
+    send('AT+BEFC200AT+RESET');
+    // send('AT+RESET');
   }
 );
 
