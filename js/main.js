@@ -71,13 +71,20 @@ disconnectButton.addEventListener('click', () => {
 ledonButton.addEventListener(
   'click', () => {
     send('AT+BEFC200');
-    // send('AT+RESET');
+    setTimeout(() => {  send('AT+AFTC200'); }, 200);
+    // setTimeout(() => {  send('AT+PIO21'); }, 1000);
+    setTimeout(() => {  send('AT+RESET'); }, 400);
   }
 );
 
-ledoffButton.addEventListener('click', () => {
-  send('AT+BEFC000');
-});
+ledoffButton.addEventListener(
+  'click', () => {
+    send('AT+BEFC000');
+    setTimeout(() => {  send('AT+AFTC000'); }, 200);
+    // setTimeout(() => {  send('AT+PIO20'); }, 1000);
+    setTimeout(() => {  send('AT+RESET'); }, 400);
+  }
+);
 
 
 sendForm.addEventListener('submit', (event) => {
