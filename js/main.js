@@ -4,6 +4,7 @@ const connectButton = document.getElementById('connect');
 const disconnectButton = document.getElementById('disconnect');
 const ledonButton = document.getElementById('ledon');
 const ledoffButton = document.getElementById('ledoff');
+const batteryButton = document.getElementById('battery');
 const terminalContainer = document.getElementById('terminal');
 const sendForm = document.getElementById('send-form');
 const inputField = document.getElementById('input');
@@ -83,6 +84,12 @@ ledoffButton.addEventListener(
     setTimeout(() => {  send('AT+AFTC000'); }, 200);
     // setTimeout(() => {  send('AT+PIO20'); }, 1000);
     setTimeout(() => {  send('AT+RESET'); }, 400);
+  }
+);
+
+batteryButton.addEventListener(
+  'click', () => {
+    setTimeout(() => {  send('AT+BATT?'); }, 200);
   }
 );
 
