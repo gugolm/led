@@ -60,6 +60,8 @@ button {
       color: #F44336; }
     .terminal div.in {
       color: #2196F3; }
+    .terminal div.sys {
+      color: #03c03c; }
 
 .send-form {
   display: flex;
