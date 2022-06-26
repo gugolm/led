@@ -10,6 +10,8 @@ const sendForm = document.getElementById('send-form');
 const inputField = document.getElementById('input');
 
 let flag = 'None';
+let voltage = 'None';
+let voltageNum = 0;
 
 // Helpers.
 const defaultDeviceName = 'Lights';
@@ -40,15 +42,34 @@ const terminal = new BluetoothTerminal();
 terminal.receive = function(data) {
   // if (data.includes('OK+Set:')) {
   //   logToTerminal('Setted parameter ' + data, 'in');}
-  if (flag == 'set_parameter') {
-    if (data == 'OK+Set:200')
-      logToTerminal('Гирлянда включена ' + data, 'sys');
-    else if (data == 'OK+Set:000')
-      logToTerminal('Гирлянда выключена ' + data, 'sys');
-    else if (data == 'OK+RESET')
-      logToTerminal('Устройство перезагружается ' + data, 'sys');}
+  if (flag == 'LightsOn') {
+    switch(data) {
+      case 'OK+RESET':  // if (x === 'value2')
+        logToTerminal('Гирлянда включена, устройство перезагружается', 'sys');
+      break;
+      default:
+        // logToTerminal('default' + data, 'sys');
+    }
+  }
+  else if (flag == 'LightsOff') {
+    switch(data) {
+      case 'OK+RESET':  // if (x === 'value2')
+        logToTerminal('Гирлянда выключена, устройство перезагружается', 'sys');
+      break;
+      default:
+        // logToTerminal('default' + data, 'sys');
+    }
+  }
   else if (flag == 'battery_voltage') {
-    logToTerminal('Напряжение батареи ' + data, 'sys');}
+    voltage = data.substr(data.length - 3, data.length);
+    voltageNum = Number(voltage);
+    if (voltageNum < 50)
+      logToTerminal('Заряд батареи менее 5%, зарядите устройство! ', 'out');
+    else if (voltageNum < 99)
+      logToTerminal('Заряд батареи менее 30% ', 'sys');
+    else
+      logToTerminal('Заряд батареи более 30% ', 'sys');
+  }
   else {
     logToTerminal('Received data ' + data, 'in');}
 };
@@ -72,30 +93,9 @@ const send = (data) => {
 
 // Implement own send function to log outcoming data to the terminal.
 const sendcmd = (data) => {
-  if (data == 'AT+BATT?') {
-    terminal.send(data).
-    // then(() => logToTerminal('Напряжение батареи', 'out')).
-    catch((error) => logToTerminal(error));}
-  else if (data == 'AT+RESET') {
-    // flag = 'set_parameter';
-    terminal.send(data).
-    // then(() => logToTerminal('Устройство перезагружается', 'out')).
-    catch((error) => logToTerminal(error));}
-  else if (data == 'AT+BEFC200') {
-    // flag = 'set_parameter';
-    terminal.send(data).
-    // then(() => logToTerminal('Гирлянда включена', 'out')).
-    catch((error) => logToTerminal(error));}
-  else if (data == 'AT+BEFC000') {
-    // flag = 'set_parameter';
-    terminal.send(data).
-    // then(() => logToTerminal('Гирлянда выключена', 'out')).
-    catch((error) => logToTerminal(error));}
-  else {
-    // flag = 'None';
     terminal.send(data).
     // then(() => logToTerminal('Leds OFF', 'out')).
-    catch((error) => logToTerminal(error));}    
+    catch((error) => logToTerminal(error));
 };
 
 // Bind event listeners to the UI elements.
@@ -114,21 +114,23 @@ disconnectButton.addEventListener('click', () => {
 
 ledonButton.addEventListener(
   'click', () => {
-    flag = 'set_parameter';
+    flag = 'LightsOn';
     sendcmd('AT+BEFC200');
     setTimeout(() => {  sendcmd('AT+AFTC200'); }, 200);
     // setTimeout(() => {  send('AT+PIO21'); }, 1000);
     setTimeout(() => {  sendcmd('AT+RESET'); }, 400);
+    setTimeout(() => { flag = 'None'; }, 500);
   }
 );
 
 ledoffButton.addEventListener(
   'click', () => {
-    flag = 'set_parameter';
+    flag = 'LightsOff';
     sendcmd('AT+BEFC000');
     setTimeout(() => {  sendcmd('AT+AFTC000'); }, 200);
     // setTimeout(() => {  send('AT+PIO20'); }, 1000);
     setTimeout(() => {  sendcmd('AT+RESET'); }, 400);
+    setTimeout(() => { flag = 'None'; }, 500);
   }
 );
 
@@ -137,9 +139,9 @@ batteryButton.addEventListener(
     // sendcmd('AT+BATT?');
     flag = 'battery_voltage';
     setTimeout(() => {  sendcmd('AT+BATT?'); }, 200);
+    setTimeout(() => { flag = 'None'; }, 500);
   }
 );
-
 
 sendForm.addEventListener('submit', (event) => {
   event.preventDefault();
