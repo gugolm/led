@@ -44,8 +44,10 @@ terminal.receive = function(data) {
   //   logToTerminal('Setted parameter ' + data, 'in');}
   if (flag == 'LightsOn') {
     switch(data) {
-      case 'OK+RESET':  // if (x === 'value2')
+      case 'OK+RESET': {  // if (x === 'value2')
         logToTerminal('Гирлянда включена, устройство перезагружается', 'sys');
+        flag = 'None';
+      }
       break;
       default:
         // logToTerminal('default' + data, 'sys');
@@ -53,8 +55,10 @@ terminal.receive = function(data) {
   }
   else if (flag == 'LightsOff') {
     switch(data) {
-      case 'OK+RESET':  // if (x === 'value2')
+      case 'OK+RESET': { // if (x === 'value2')
         logToTerminal('Гирлянда выключена, устройство перезагружается', 'sys');
+        flag = 'None';
+      }
       break;
       default:
         // logToTerminal('default' + data, 'sys');
@@ -69,6 +73,7 @@ terminal.receive = function(data) {
       logToTerminal('Заряд батареи менее 30% ', 'sys');
     else
       logToTerminal('Заряд батареи более 30% ', 'sys');
+    flag = 'None';
   }
   else {
     logToTerminal('Received data ' + data, 'in');}
@@ -119,7 +124,6 @@ ledonButton.addEventListener(
     setTimeout(() => {  sendcmd('AT+AFTC200'); }, 200);
     // setTimeout(() => {  send('AT+PIO21'); }, 1000);
     setTimeout(() => {  sendcmd('AT+RESET'); }, 400);
-    setTimeout(() => { flag = 'None'; }, 500);
   }
 );
 
@@ -130,7 +134,6 @@ ledoffButton.addEventListener(
     setTimeout(() => {  sendcmd('AT+AFTC000'); }, 200);
     // setTimeout(() => {  send('AT+PIO20'); }, 1000);
     setTimeout(() => {  sendcmd('AT+RESET'); }, 400);
-    setTimeout(() => { flag = 'None'; }, 500);
   }
 );
 
@@ -138,8 +141,7 @@ batteryButton.addEventListener(
   'click', () => {
     // sendcmd('AT+BATT?');
     flag = 'battery_voltage';
-    setTimeout(() => {  sendcmd('AT+BATT?'); }, 200);
-    setTimeout(() => { flag = 'None'; }, 500);
+    sendcmd('AT+BATT?');
   }
 );
 
