@@ -123,6 +123,21 @@ class BluetoothTerminal {
   }
 
   /**
+   * Disconnect from the connected device by timer.
+   */
+  timerdisconnect() {
+    this._timerdisconnectFromDevice(this._device);
+
+    if (this._characteristic) {
+      this._characteristic.removeEventListener('characteristicvaluechanged',
+          this._boundHandleCharacteristicValueChanged);
+      this._characteristic = null;
+    }
+
+    this._device = null;
+  }
+
+  /**
    * Data receiving handler which called whenever the new data comes from
    * the connected device, override it to handle incoming data.
    * @param {string} data - Data
@@ -239,6 +254,32 @@ class BluetoothTerminal {
     }
 
     this._log('Disconnecting from "' + device.name + '" bluetooth device...');
+
+    device.removeEventListener('gattserverdisconnected',
+        this._boundHandleDisconnection);
+
+    if (!device.gatt.connected) {
+      this._log('"' + device.name +
+          '" bluetooth device is already disconnected');
+      return;
+    }
+
+    device.gatt.disconnect();
+
+    this._log('"' + device.name + '" bluetooth device disconnected');
+  }
+
+  /**
+   * Disconnect from device.
+   * @param {Object} device
+   * @private
+   */
+  _timerdisconnectFromDevice(device) {
+    if (!device) {
+      return;
+    }
+
+    this._log('Timer disconnection from "' + device.name + '" bluetooth device...');
 
     device.removeEventListener('gattserverdisconnected',
         this._boundHandleDisconnection);

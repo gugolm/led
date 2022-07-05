@@ -75,6 +75,15 @@ terminal.receive = function(data) {
       logToTerminal('Заряд батареи более 30% ', 'sys');
     flag = 'None';
   }
+  else if (flag == 'light_stat') {
+    if (data.substr(data.length - 1, data.length) == '1')
+      logToTerminal('Гирлянда включена.', 'sys');
+    else if (data.substr(data.length - 1, data.length) == '0')
+      logToTerminal('Гирлянда выключена.', 'sys');
+    else
+      ;
+    flag = 'None';
+  }
   else {
     logToTerminal('Received data ' + data, 'in');}
 };
@@ -90,7 +99,7 @@ terminal._log = function(...messages) {
 
 // Implement own send function to log outcoming data to the terminal.
 const send = (data) => {
-    flag = 'None';
+    // flag = 'None';
     terminal.send(data).
     then(() => logToTerminal(data, 'out')).
     catch((error) => logToTerminal(error));
@@ -102,6 +111,12 @@ const sendcmd = (data) => {
     // then(() => logToTerminal('Leds OFF', 'out')).
     catch((error) => logToTerminal(error));
 };
+
+// Disconnection by timer.
+setInterval(() => {
+  // logToTerminal('timerdisconnect', 'out');
+  terminal.timerdisconnect();
+}, 300000);
 
 // Bind event listeners to the UI elements.
 connectButton.addEventListener('click', () => {
@@ -147,7 +162,7 @@ batteryButton.addEventListener(
 
 sendForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  flag = 'None';
+  // flag = 'None';
   send(inputField.value);
 
   // inputField.value = '';
