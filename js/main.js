@@ -12,9 +12,10 @@ const inputField = document.getElementById('input');
 let flag = 'None';
 let voltage = 'None';
 let voltageNum = 0;
+let DeviceName = 0;
 
 // Helpers.
-const defaultDeviceName = 'Lights';
+const defaultDeviceName = 'LIGHT';
 const terminalAutoScrollingLimit = terminalContainer.offsetHeight / 2;
 let isTerminalAutoScrolling = true;
 
@@ -45,7 +46,11 @@ terminal.receive = function(data) {
   if (flag == 'LightsOn') {
     switch(data) {
       case 'OK+RESET': {  // if (x === 'value2')
-        logToTerminal('Гирлянда включена, устройство перезагружается', 'sys');
+        DeviceName = terminal.getDeviceName() ? terminal.getDeviceName() : defaultDeviceName;
+        if (DeviceName == 'FOUNTAIN')
+          logToTerminal('Фонтан включен, устройство перезагружается', 'sys');
+        else
+          logToTerminal('Гирлянда включена, устройство перезагружается', 'sys');
         flag = 'None';
       }
       break;
@@ -56,7 +61,11 @@ terminal.receive = function(data) {
   else if (flag == 'LightsOff') {
     switch(data) {
       case 'OK+RESET': { // if (x === 'value2')
-        logToTerminal('Гирлянда выключена, устройство перезагружается', 'sys');
+        DeviceName = terminal.getDeviceName() ? terminal.getDeviceName() : defaultDeviceName;
+        if (DeviceName == 'FOUNTAIN')
+          logToTerminal('Фонтан отключен, устройство перезагружается', 'sys');
+        else
+          logToTerminal('Гирлянда отключена, устройство перезагружается', 'sys');
         flag = 'None';
       }
       break;
