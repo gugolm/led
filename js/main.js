@@ -15,7 +15,7 @@ let voltageNum = 0;
 let DeviceName = 0;
 
 // Helpers.
-const defaultDeviceName = 'LIGHT';
+const defaultDeviceName = 'LIGHTS';
 const terminalAutoScrollingLimit = terminalContainer.offsetHeight / 2;
 let isTerminalAutoScrolling = true;
 

@@ -283,7 +283,7 @@ class BluetoothTerminal {
     }
 
     // this._log('Timer disconnection from "' + device.name + '" bluetooth device...');
-    logToTerminal('"' + this.device.name + '" отключено по таймеру', 'in');
+    // logToTerminal('"' + this.device.name + '" отключено по таймеру', 'in');
 
     device.removeEventListener('gattserverdisconnected',
         this._boundHandleDisconnection);
@@ -291,14 +291,14 @@ class BluetoothTerminal {
     if (!device.gatt.connected) {
       // this._log('"' + device.name +
       //     '" bluetooth device is already disconnected');
-      logToTerminal('"' + this._device.name + '" уже отключено', 'out'); 
+      // logToTerminal('"' + this.device.name + '" уже отключено', 'out'); 
       return;
     }
 
     device.gatt.disconnect();
 
     // this._log('"' + device.name + '" bluetooth device disconnected');
-    logToTerminal('"' + this._device.name + '" отключено', 'out');
+    logToTerminal('"' + this._device.name + '" отключено по таймеру', 'out');
   }
 
   /**
