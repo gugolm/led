@@ -47,10 +47,12 @@ terminal.receive = function(data) {
     switch(data) {
       case 'OK+RESET': {  // if (x === 'value2')
         DeviceName = terminal.getDeviceName() ? terminal.getDeviceName() : defaultDeviceName;
-        if (DeviceName == 'FOUNTAIN')
-          logToTerminal('Фонтан включен, устройство перезагружается', 'sys');
-        else
-          logToTerminal('Гирлянда включена, устройство перезагружается', 'sys');
+        if (DeviceName == 'FOUNTAIN') {
+          logToTerminal('Фонтан включен', 'sys');
+          terminal.disconnect();}
+        else {
+          logToTerminal('Гирлянда включена', 'sys');
+          terminal.disconnect();}
         flag = 'None';
       }
       break;
@@ -62,10 +64,12 @@ terminal.receive = function(data) {
     switch(data) {
       case 'OK+RESET': { // if (x === 'value2')
         DeviceName = terminal.getDeviceName() ? terminal.getDeviceName() : defaultDeviceName;
-        if (DeviceName == 'FOUNTAIN')
-          logToTerminal('Фонтан отключен, устройство перезагружается', 'sys');
-        else
-          logToTerminal('Гирлянда отключена, устройство перезагружается', 'sys');
+        if (DeviceName == 'FOUNTAIN') {
+          logToTerminal('Фонтан отключен', 'sys');
+          terminal.disconnect();}
+        else {
+          logToTerminal('Гирлянда отключена', 'sys');
+          terminal.disconnect();}
         flag = 'None';
       }
       break;
@@ -79,16 +83,16 @@ terminal.receive = function(data) {
     if (voltageNum < 50)
       logToTerminal('Заряд батареи менее 5%, зарядите устройство! ', 'out');
     else if (voltageNum < 99)
-      logToTerminal('Заряд батареи менее 30% ', 'sys');
+      logToTerminal('Заряд батареи менее 30%', 'sys');
     else
-      logToTerminal('Заряд батареи более 30% ', 'sys');
+      logToTerminal('Заряд батареи более 30%', 'sys');
     flag = 'None';
   }
   else if (flag == 'light_stat') {
     if (data.substr(data.length - 1, data.length) == '1')
-      logToTerminal('Гирлянда включена.', 'sys');
+      logToTerminal('Гирлянда включена', 'sys');
     else if (data.substr(data.length - 1, data.length) == '0')
-      logToTerminal('Гирлянда выключена.', 'sys');
+      logToTerminal('Гирлянда выключена', 'sys');
     else
       ;
     flag = 'None';
